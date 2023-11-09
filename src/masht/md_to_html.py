@@ -1,19 +1,17 @@
-
-import markdown
 import sys
-
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from textwrap import dedent
 
-from .__about__ import __version__
+import markdown
+
+from masht.__about__ import __version__
 
 app_name = "masht"
 
 app_title = f"{app_name} (v.{__version__})"
 
-
-run_dt = datetime.now()
+run_dt_utc = datetime.now(tz=timezone.utc)
 
 
 def html_style():
@@ -72,18 +70,18 @@ def html_tail():
         </body>
         </html>
         """
-    ).format(run_dt.strftime("%Y-%m-%d %H:%M"), app_title)
+    ).format(run_dt_utc.astimezone().strftime("%Y-%m-%d %H:%M"), app_title)
 
 
 def write_md_as_html(filename: str):
     md_path = Path(filename)
     print(f"Reading '{md_path}'.")
-    
+
     # assert md_path.exists()
     if not md_path.exists():
         print(f"ERROR: '{md_path}' does not exist.")
         return
-    
+
     # assert md_path.suffix.lower() == ".md"
     if md_path.suffix.lower() != ".md":
         print(f"ERROR: '{md_path}' is not a Markdown file.")
@@ -105,10 +103,11 @@ def write_md_as_html(filename: str):
 
 def main():
     print(f"\n{app_title}\n")
-    if len(sys.argv) < 2:
+    argc_min = 2
+    if len(sys.argv) < argc_min:
         print("\nUSAGE: md_to_html <markdown file>\n")
         return 1
 
-    md_files = [s for s in sys.argv[1:]]
+    md_files = sys.argv[1:]
     for md_file in md_files:
         write_md_as_html(md_file)

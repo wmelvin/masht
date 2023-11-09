@@ -1,11 +1,7 @@
-
-import pytest
 import sys
-
 from textwrap import dedent
 
 from masht import md_to_html
-
 
 # def test_failure():
 #     assert False
@@ -42,4 +38,3 @@ def test_a_markdown_file(tmp_path, monkeypatch):
     md_to_html.main()
 
     assert md.with_suffix(".md.AS.html").exists()
-

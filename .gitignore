@@ -1,7 +1,11 @@
 .vscode/
+
+.hatch/
 venv/
 __pycache__/
 .pytest_cache/
+.mypy_cache/
 dist/
 *.egg-info/
-.hatch/
+
+.coverage*
