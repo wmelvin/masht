@@ -73,6 +73,19 @@ def html_tail():
     ).format(run_dt_utc.astimezone().strftime("%Y-%m-%d %H:%M"), app_title)
 
 
+#  Checks the Markdown for lists not preceeded by a blank line.
+def check_md(md: str):
+    lines = md.splitlines()
+    prev_li = False
+    prev_blank = True
+    for i, line in enumerate(lines, start=1):
+        is_li = line.startswith("- ") or line.startswith("* ")
+        if i > 1 and is_li and not (prev_li or prev_blank):
+            print(f"WARNING: Lists should be preceeded by a blank line. At line {i}.")
+        prev_li = is_li
+        prev_blank = line == ""
+
+
 def write_md_as_html(filename: str):
     md_path = Path(filename)
     print(f"Reading '{md_path}'.")
@@ -92,7 +105,10 @@ def write_md_as_html(filename: str):
 
     html = html_head(f"{md_path.name} as HTML")
 
-    html += markdown.markdown(md_path.read_text())
+    md = md_path.read_text()
+    check_md(md)
+    as_html = markdown.markdown(md)
+    html += as_html
 
     html += html_tail()
 
@@ -111,3 +127,7 @@ def main():
     md_files = sys.argv[1:]
     for md_file in md_files:
         write_md_as_html(md_file)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
