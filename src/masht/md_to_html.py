@@ -90,12 +90,10 @@ def write_md_as_html(filename: str):
     md_path = Path(filename)
     print(f"Reading '{md_path}'.")
 
-    # assert md_path.exists()
     if not md_path.exists():
         print(f"ERROR: '{md_path}' does not exist.")
         return
 
-    # assert md_path.suffix.lower() == ".md"
     if md_path.suffix.lower() != ".md":
         print(f"ERROR: '{md_path}' is not a Markdown file.")
         return
