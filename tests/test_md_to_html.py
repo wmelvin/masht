@@ -7,7 +7,7 @@ from masht import md_to_html
 #     assert False
 
 
-def test_a_markdown_file(tmp_path, monkeypatch):
+def test_a_markdown_file(tmp_path):
     md = tmp_path / "test.md"
     md.write_text(
         dedent(
@@ -38,13 +38,12 @@ def test_a_markdown_file(tmp_path, monkeypatch):
         )
     )
     assert md.exists()
-    monkeypatch.setattr(sys, "argv", ["masht.py", str(md)])
-    md_to_html.main()
+    md_to_html.main([str(md)])
     ht = md.with_suffix(".md.AS.html")
     assert ht.exists()
 
 
-def test_a_markdown_file_with_list_not_preceeded_by_blank_line(tmp_path, monkeypatch, capsys):
+def test_a_markdown_file_with_list_not_preceeded_by_blank_line(tmp_path, capsys):
     md = tmp_path / "test-lists.md"
     md.write_text(
         dedent(
@@ -74,8 +73,7 @@ def test_a_markdown_file_with_list_not_preceeded_by_blank_line(tmp_path, monkeyp
     )
 
     assert md.exists()
-    monkeypatch.setattr(sys, "argv", ["masht.py", str(md)])
-    md_to_html.main()
+    md_to_html.main([str(md)])
     ht = md.with_suffix(".md.AS.html")
     assert ht.exists()
     captured = capsys.readouterr()
@@ -86,28 +84,25 @@ def test_a_markdown_file_with_list_not_preceeded_by_blank_line(tmp_path, monkeyp
     # wb.open_new_tab(f"file://{ht}")
 
 
-def test_file_does_not_exist(tmp_path, capsys, monkeypatch):
+def test_file_does_not_exist(tmp_path, capsys):
     non_existent_file = tmp_path / "non_existent.md"
-    monkeypatch.setattr(sys, "argv", ["masht.py", str(non_existent_file)])
-    md_to_html.main()
+    md_to_html.main([str(non_existent_file)])
     captured = capsys.readouterr()
     assert f"ERROR: '{non_existent_file}' does not exist." in captured.out
 
 
-def test_not_a_markdown_file(tmp_path, capsys, monkeypatch):
+def test_not_a_markdown_file(tmp_path, capsys):
     not_md_file = tmp_path / "test.txt"
     not_md_file.write_text("This is not a markdown file.")
-    monkeypatch.setattr(sys, "argv", ["masht.py", str(not_md_file)])
-    md_to_html.main()
+    md_to_html.main([str(not_md_file)])
     captured = capsys.readouterr()
     assert f"ERROR: '{not_md_file}' is not a Markdown file." in captured.out
 
 
-def test_md_to_html_correct_output(tmp_path, monkeypatch):
+def test_md_to_html_correct_output(tmp_path):
     md_file = tmp_path / "test.md"
     md_file.write_text("# Heading\nThis is a test markdown file.")
-    monkeypatch.setattr(sys, "argv", ["masht.py", str(md_file)])
-    md_to_html.main()
+    md_to_html.main([str(md_file)])
     out_file = md_file.with_suffix(".md.AS.html")
     assert out_file.exists()
     html_content = out_file.read_text()
@@ -119,25 +114,23 @@ def test_main_no_arguments(monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", ["masht.py"])
     md_to_html.main()
     captured = capsys.readouterr()
-    assert "\nUSAGE: md_to_html <markdown file>\n" in captured.out
+    assert "\nUSAGE: masht filename.md [filename2.md ...]\n" in captured.out
 
 
-def test_main_single_argument(tmp_path, monkeypatch, capsys):
+def test_main_single_argument(tmp_path, capsys):
     md_file = tmp_path / "test.md"
     md_file.write_text("# Heading\nThis is a test markdown file.")
-    monkeypatch.setattr(sys, "argv", ["masht.py", str(md_file)])
-    md_to_html.main()
+    md_to_html.main([str(md_file)])
     out_file = md_file.with_suffix(".md.AS.html")
     assert out_file.exists()
 
 
-def test_main_multiple_arguments(tmp_path, monkeypatch, capsys):
+def test_main_multiple_arguments(tmp_path, capsys):
     md_file1 = tmp_path / "test1.md"
     md_file1.write_text("# Heading\nThis is a test markdown file.")
     md_file2 = tmp_path / "test2.md"
     md_file2.write_text("# Heading\nThis is another test markdown file.")
-    monkeypatch.setattr(sys, "argv", ["masht.py", str(md_file1), str(md_file2)])
-    md_to_html.main()
+    md_to_html.main([str(md_file1), str(md_file2)])
     out_file1 = md_file1.with_suffix(".md.AS.html")
     out_file2 = md_file2.with_suffix(".md.AS.html")
     assert out_file1.exists()

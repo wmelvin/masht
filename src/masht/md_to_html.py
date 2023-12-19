@@ -115,17 +115,25 @@ def write_md_as_html(filename: str):
     out_path.write_text(html)
 
 
-def main():
+def main(arglist=None):
     print(f"\n{app_title}\n")
-    argc_min = 2
-    if len(sys.argv) < argc_min:
-        print("\nUSAGE: md_to_html <markdown file>\n")
-        return 1
 
-    md_files = sys.argv[1:]
-    for md_file in md_files:
+    if arglist is None:
+        arglist = sys.argv[1:]
+
+    usage_msg = "\nUSAGE: masht filename.md [filename2.md ...]\n"
+    
+    if len(arglist) < 1:
+        print(usage_msg)
+        return 1
+    
+    if arglist[0] == "-h" or arglist[0] == "--help":
+        print(usage_msg)
+        return 0
+
+    for md_file in arglist:
         write_md_as_html(md_file)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
