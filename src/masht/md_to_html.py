@@ -122,11 +122,11 @@ def main(arglist=None):
         arglist = sys.argv[1:]
 
     usage_msg = "\nUSAGE: masht filename.md [filename2.md ...]\n"
-    
+
     if len(arglist) < 1:
         print(usage_msg)
         return 1
-    
+
     if arglist[0] == "-h" or arglist[0] == "--help":
         print(usage_msg)
         return 0

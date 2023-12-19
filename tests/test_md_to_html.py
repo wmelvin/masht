@@ -1,10 +1,6 @@
-import sys
 from textwrap import dedent
 
 from masht import md_to_html
-
-# def test_failure():
-#     assert False
 
 
 def test_a_markdown_file(tmp_path):
@@ -110,14 +106,19 @@ def test_md_to_html_correct_output(tmp_path):
     assert "<p>This is a test markdown file.</p>" in html_content
 
 
-def test_main_no_arguments(monkeypatch, capsys):
-    monkeypatch.setattr(sys, "argv", ["masht.py"])
-    md_to_html.main()
+def test_main_no_arguments(capsys):
+    md_to_html.main([])
     captured = capsys.readouterr()
     assert "\nUSAGE: masht filename.md [filename2.md ...]\n" in captured.out
 
 
-def test_main_single_argument(tmp_path, capsys):
+def test_main_help(capsys):
+    md_to_html.main(["-h"])
+    captured = capsys.readouterr()
+    assert "\nUSAGE: masht filename.md [filename2.md ...]\n" in captured.out
+
+
+def test_main_single_argument(tmp_path):
     md_file = tmp_path / "test.md"
     md_file.write_text("# Heading\nThis is a test markdown file.")
     md_to_html.main([str(md_file)])
@@ -125,7 +126,7 @@ def test_main_single_argument(tmp_path, capsys):
     assert out_file.exists()
 
 
-def test_main_multiple_arguments(tmp_path, capsys):
+def test_main_multiple_arguments(tmp_path):
     md_file1 = tmp_path / "test1.md"
     md_file1.write_text("# Heading\nThis is a test markdown file.")
     md_file2 = tmp_path / "test2.md"
