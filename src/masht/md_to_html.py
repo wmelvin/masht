@@ -86,6 +86,32 @@ def check_md(md: str):
         prev_blank = line == ""
 
 
+def alter_html(html: str):
+    """
+    Alter the HTML to fix issues.
+
+    The markdown module does not add a <pre> tag around <code> tags for
+    multiline code blocks.
+    """
+
+    lines = html.splitlines()
+
+    for i, line in enumerate(lines):
+        #  This only works if there is a single <code> tag on the line.
+        #  In the case of a inline code block followed by opening a multiline
+        #  code block, this will not work. Normally the opening, and closing,
+        #  of a multiline code block will stand alone.
+
+        if ("<code>" in line) and ("<pre><code>" not in line) and ("</code>" not in line):
+            lines[i] = line.replace("<code>", "<pre><code>")
+
+        if ("</code>" in line) and ("</code></pre>" not in line) and ("<code>" not in line):
+            lines[i] = line.replace("</code>", "</code></pre>")
+
+    return "\n".join(lines)
+
+
+
 def write_md_as_html(filename: str):
     md_path = Path(filename)
     print(f"Reading '{md_path}'.")
@@ -106,6 +132,7 @@ def write_md_as_html(filename: str):
     md = md_path.read_text()
     check_md(md)
     as_html = markdown.markdown(md)
+    as_html = alter_html(as_html)
     html += as_html
 
     html += html_tail()

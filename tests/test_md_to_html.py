@@ -136,3 +136,29 @@ def test_main_multiple_arguments(tmp_path):
     out_file2 = md_file2.with_suffix(".md.AS.html")
     assert out_file1.exists()
     assert out_file2.exists()
+
+
+def test_markdown_with_fenced_code_blocks(tmp_path):
+    md = tmp_path / "test.md"
+    md.write_text(
+        dedent(
+            """
+            The following is a muili-line fenced code block:
+
+            ```
+            def myfunc(rocks=True):
+                if rocks:
+                    print("Woohoo!")
+                else:
+                    print("meh")
+            ```
+            """
+        )
+    )
+    assert md.exists()
+    md_to_html.main([str(md)])
+    ht = md.with_suffix(".md.AS.html")
+    assert ht.exists()
+    html_content = ht.read_text()
+    #  Multi-line code block should be wrapped in <pre><code>...</code></pre>
+    assert "<pre><code>def myfunc(rocks=True):" in html_content
