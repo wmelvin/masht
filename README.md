@@ -10,4 +10,4 @@ PyPI: [masht](https://pypi.org/project/masht/)
 USAGE: masht filename.md [filename2.md ...]
 ```
 
-Uses the [Markdown](https://pypi.org/project/Markdown/) package ([documentation](https://python-markdown.github.io/)).
+Uses the [mistune](https://pypi.org/project/mistune/) Markdown parser ([documentation](https://mistune.lepture.com/en/latest/)).

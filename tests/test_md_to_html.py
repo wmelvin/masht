@@ -143,14 +143,15 @@ def test_markdown_with_fenced_code_blocks(tmp_path):
     md.write_text(
         dedent(
             """
-            The following is a muili-line fenced code block:
-
+            # Heading 1
+            Here's a muili-line `fenced code block`:
             ```
             def myfunc(rocks=True):
                 if rocks:
                     print("Woohoo!")
                 else:
                     print("meh")
+            # Comment
             ```
             """
         )
