@@ -20,7 +20,16 @@ def html_style():
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 1rem 4rem;
         }
-        h1 { color: #333; }
+        h1 { color: #88a; }
+        h2 { color: #668; }
+        h3 { color: #557; }
+        h4 { color: #336; }
+        h5 { color: #224; }
+        table { border-collapse: collapse; }
+        td, th {
+            border: 1px solid silver;
+            padding: 0.4rem 1rem;
+        }
         blockquote {
             background-color: #edf2f7;
             border-left: 2px solid #777;
@@ -113,7 +122,7 @@ def write_md_as_html(filename: str):
     md = md_path.read_text()
     check_md(md)
 
-    as_html = mistune.markdown(md)
+    as_html = mistune.html(md)
 
     html += as_html
 
