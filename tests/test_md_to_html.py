@@ -73,7 +73,10 @@ def test_a_markdown_file_with_list_not_preceeded_by_blank_line(tmp_path, capsys)
     ht = md.with_suffix(".md.AS.html")
     assert ht.exists()
     captured = capsys.readouterr()
-    assert "WARNING: Lists should be preceeded by a blank line. At line 17." in captured.out
+    assert (
+        "WARNING: Lists should be preceeded by a blank line. At line 17."
+        in captured.out
+    )
 
     #  Open the test-output file in the default browser.
     # import webbrowser as wb

@@ -14,7 +14,7 @@ app_title = f"{app_name} (v.{__version__})"
 run_dt_utc = datetime.now(tz=timezone.utc)
 
 
-def html_style():
+def html_style() -> str:
     s = """
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -77,7 +77,7 @@ def html_head(head_title: str, doc_title: str) -> str:
     ).format(head_title, html_style(), app_name, doc_title)
 
 
-def html_tail():
+def html_tail() -> str:
     return dedent(
         """
         <div id="footer">
@@ -90,19 +90,19 @@ def html_tail():
 
 
 #  Checks the Markdown for lists not preceeded by a blank line.
-def check_md(md: str):
+def check_md(md: str) -> None:
     lines = md.splitlines()
     prev_li = False
     prev_blank = True
     for i, line in enumerate(lines, start=1):
-        is_li = line.startswith("- ") or line.startswith("* ")
+        is_li = line.startswith(("- ", "* "))
         if i > 1 and is_li and not (prev_li or prev_blank):
             print(f"WARNING: Lists should be preceeded by a blank line. At line {i}.")
         prev_li = is_li
         prev_blank = line == ""
 
 
-def write_md_as_html(filename: str):
+def write_md_as_html(filename: str) -> None:
     md_path = Path(filename)
     print(f"Reading '{md_path}'.")
 
@@ -131,7 +131,7 @@ def write_md_as_html(filename: str):
     out_path.write_text(html)
 
 
-def main(arglist=None):
+def main(arglist=None) -> int:
     print(f"\n{app_title}\n")
 
     if arglist is None:
@@ -149,6 +149,8 @@ def main(arglist=None):
 
     for md_file in arglist:
         write_md_as_html(md_file)
+
+    return 0
 
 
 if __name__ == "__main__":
