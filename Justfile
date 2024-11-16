@@ -9,7 +9,6 @@
 
 @clean:
   -rm dist/*
-  -rmdir dist
 
 @format:
   uv run ruff format

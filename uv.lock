@@ -30,7 +30,7 @@ wheels = [
 
 [[package]]
 name = "masht"
-version = "0.1.dev9"
+version = "0.1.dev10"
 source = { editable = "." }
 dependencies = [
     { name = "mistune" },
