@@ -25,7 +25,19 @@ masht = "masht:md_to_html.main"
 version = {attr = "masht.__about__.__version__"}
 
 [tool.uv]
-dev-dependencies = ["pytest", "ruff"]
+dev-dependencies = ["pytest", "ruff", "tox", "tox-uv"]
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+requires = tox-uv
+envlist = py39, py310, py311, py312, py313
+
+[testenv]
+runner = uv-venv-runner
+description = Run tests with pytest
+commands = pytest
+"""
 
 [tool.ruff]
 line-length = 88

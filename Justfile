@@ -18,3 +18,6 @@
 
 @test: 
   uv run pytest
+
+@tox:
+  uv run tox
