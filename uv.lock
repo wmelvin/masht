@@ -1,4 +1,5 @@
 version = 1
+revision = 1
 requires-python = ">=3.9"
 
 [[package]]
@@ -66,7 +67,6 @@ wheels = [
 
 [[package]]
 name = "masht"
-version = "0.1.dev11"
 source = { editable = "." }
 dependencies = [
     { name = "mistune" },

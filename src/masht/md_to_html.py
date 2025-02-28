@@ -36,6 +36,14 @@ def html_style() -> str:
             margin-left: 0;
             padding: 0.2rem 1rem;
         }
+        li {
+            font-family: "IBM Plex Mono", "Consolas", "Fira Mono",
+            "Menlo", "DejaVu Sans Mono", monospace;
+        }
+        code {
+            color: midnightblue;
+            font-size: large;
+        }
         a:link, a:visited {
             color: #00248F;
             text-decoration: none;
@@ -52,7 +60,7 @@ def html_style() -> str:
             padding: 4px;
         }
     """
-    return s.lstrip("\n").rstrip()
+    return s.strip()
 
 
 def html_head(source_md: Path) -> str:
@@ -67,12 +75,12 @@ def html_head(source_md: Path) -> str:
         -->
         <html lang="en">
         <head>
-            <title>{source_md.name} as HTML</title>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-            <style>
-            {html_style()}
-            </style>
-            <base target="_blank">
+        <title>{source_md.name} as HTML</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style>
+        {html_style()}
+        </style>
+        <base target="_blank">
         </head>
         <body>
         """
