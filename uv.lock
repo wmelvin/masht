@@ -69,6 +69,7 @@ wheels = [
 name = "masht"
 source = { editable = "." }
 dependencies = [
+    { name = "chardet" },
     { name = "mistune" },
 ]
 
@@ -81,7 +82,10 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "mistune" }]
+requires-dist = [
+    { name = "chardet" },
+    { name = "mistune" },
+]
 
 [package.metadata.requires-dev]
 dev = [

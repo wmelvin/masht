@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from textwrap import dedent
 
+import chardet
 import mistune
 
 from masht.__about__ import __version__
@@ -130,7 +131,12 @@ def write_md_as_html(filename: str) -> None:
 
     html = html_head(md_path)
 
-    md = md_path.read_text()
+    #  Detect the character encoding to use when reading the file as text.
+    raw_data = md_path.read_bytes()
+    det = chardet.detect(raw_data)
+    enc = det["encoding"]
+
+    md = md_path.read_text(encoding=enc)
     check_md(md)
 
     as_html = mistune.html(md)
