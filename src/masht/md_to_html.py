@@ -145,7 +145,7 @@ def write_md_as_html(filename: str) -> None:
 
     html += html_tail(md_path.name)
 
-    out_path.write_text(html)
+    out_path.write_text(html, encoding=enc)
 
 
 def main(arglist=None) -> int:
