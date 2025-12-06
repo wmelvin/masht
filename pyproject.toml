@@ -7,7 +7,7 @@ name = "masht"
 dynamic = ["version"]
 description = 'Markdown AS HTml: Creates a HTML version of a Markdown file.'
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = {text = "MIT"}
 keywords = [ "markdown", "html", "converter"]
 authors = [ { name = "Bill Melvin", email = "bill@sbillmelvin.com" } ]
@@ -24,14 +24,19 @@ masht = "masht:md_to_html.main"
 [tool.setuptools.dynamic]
 version = {attr = "masht.__about__.__version__"}
 
-[tool.uv]
-dev-dependencies = ["pytest", "ruff", "tox", "tox-uv"]
+[dependency-groups]
+dev = [
+    "pytest>=9.0.1",
+    "ruff>=0.14.8",
+    "tox>=4.32.0",
+    "tox-uv>=1.29.0",
+]
 
 [tool.tox]
 legacy_tox_ini = """
 [tox]
 requires = tox-uv
-envlist = py39, py310, py311, py312, py313
+envlist = py310, py311, py312, py313, py314
 
 [testenv]
 runner = uv-venv-runner
