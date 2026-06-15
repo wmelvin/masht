@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = 'Markdown AS HTml: Creates a HTML version of a Markdown file.'
 readme = "README.md"
 requires-python = ">=3.10"
-license = {text = "MIT"}
+license = "MIT"
 keywords = [ "markdown", "html", "converter"]
 authors = [ { name = "Bill Melvin", email = "bill@sbillmelvin.com" } ]
 dependencies = [ "chardet", "mistune" ]

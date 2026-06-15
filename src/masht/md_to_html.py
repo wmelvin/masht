@@ -45,6 +45,11 @@ def html_style() -> str:
             color: midnightblue;
             font-size: large;
         }
+        img {
+            border: 2px solid gray;
+            margin: 1rem;
+            max-width: 96%;
+        }
         a:link, a:visited {
             color: #00248F;
             text-decoration: none;
