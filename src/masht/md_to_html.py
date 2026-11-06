@@ -1,3 +1,4 @@
+import argparse
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -11,6 +12,8 @@ from masht.__about__ import __version__
 app_name = "masht"
 
 app_title = f"{app_name} (v.{__version__})"
+
+default_stylesheet = "style.css"
 
 run_dt_utc = datetime.now(tz=timezone.utc)
 
@@ -70,7 +73,7 @@ def html_style() -> str:
     return s.strip()
 
 
-def html_head(source_md: Path) -> str:
+def html_head(source_md: Path, stylesheet: str = default_stylesheet) -> str:
     dts = datetime.fromtimestamp(source_md.stat().st_mtime).strftime("%Y-%m-%d %H:%M")
     return dedent(
         f"""
@@ -87,7 +90,7 @@ def html_head(source_md: Path) -> str:
         <style>
         {html_style()}
         </style>
-        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="{stylesheet}">
         <base target="_blank">
         </head>
         <body>
@@ -121,7 +124,7 @@ def check_md(md: str) -> None:
         prev_blank = line == ""
 
 
-def write_md_as_html(filename: str) -> None:
+def write_md_as_html(filename: str, stylesheet: str = default_stylesheet) -> None:
     md_path = Path(filename)
     print(f"Reading '{md_path}'.")
 
@@ -136,7 +139,7 @@ def write_md_as_html(filename: str) -> None:
     out_path = md_path.with_suffix(".md.AS.html")
     print(f"Writing '{out_path}'.")
 
-    html = html_head(md_path)
+    html = html_head(md_path, stylesheet)
 
     #  Detect the character encoding to use when reading the file as text.
     raw_data = md_path.read_bytes()
@@ -155,24 +158,41 @@ def write_md_as_html(filename: str) -> None:
     out_path.write_text(html, encoding=enc)
 
 
+def get_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog=app_name,
+        description="Markdown AS HTml: Creates a HTML version of a Markdown file.",
+    )
+    parser.add_argument(
+        "filenames",
+        metavar="filename.md",
+        nargs="*",
+        help="One or more Markdown files to convert.",
+    )
+    parser.add_argument(
+        "--stylesheet",
+        metavar="FILE",
+        default=default_stylesheet,
+        help=f"Stylesheet file name to link to (default: {default_stylesheet}).",
+    )
+    return parser
+
+
 def main(arglist=None) -> int:
     print(f"\n{app_title}\n")
 
     if arglist is None:
         arglist = sys.argv[1:]
 
-    usage_msg = "\nUSAGE: masht filename.md [filename2.md ...]\n"
+    parser = get_parser()
+    args = parser.parse_args(arglist)
 
-    if len(arglist) < 1:
-        print(usage_msg)
+    if not args.filenames:
+        parser.print_usage()
         return 1
 
-    if arglist[0] == "-h" or arglist[0] == "--help":
-        print(usage_msg)
-        return 0
-
-    for md_file in arglist:
-        write_md_as_html(md_file)
+    for md_file in args.filenames:
+        write_md_as_html(md_file, args.stylesheet)
 
     return 0
 

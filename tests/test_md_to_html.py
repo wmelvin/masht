@@ -1,5 +1,7 @@
 from textwrap import dedent
 
+import pytest
+
 from masht import md_to_html
 
 
@@ -110,15 +112,18 @@ def test_md_to_html_correct_output(tmp_path):
 
 
 def test_main_no_arguments(capsys):
-    md_to_html.main([])
+    assert md_to_html.main([]) == 1
     captured = capsys.readouterr()
-    assert "\nUSAGE: masht filename.md [filename2.md ...]\n" in captured.out
+    assert "usage: masht" in captured.out
 
 
 def test_main_help(capsys):
-    md_to_html.main(["-h"])
+    with pytest.raises(SystemExit) as exc_info:
+        md_to_html.main(["-h"])
+    assert exc_info.value.code == 0
     captured = capsys.readouterr()
-    assert "\nUSAGE: masht filename.md [filename2.md ...]\n" in captured.out
+    assert "usage: masht" in captured.out
+    assert "--stylesheet" in captured.out
 
 
 def test_main_single_argument(tmp_path):
@@ -166,3 +171,31 @@ def test_markdown_with_fenced_code_blocks(tmp_path):
     html_content = ht.read_text()
     #  Multi-line code block should be wrapped in <pre><code>...</code></pre>
     assert "<pre><code>def myfunc(rocks=True):" in html_content
+
+
+def test_default_stylesheet(tmp_path):
+    md_file = tmp_path / "test.md"
+    md_file.write_text("# Heading\n")
+    md_to_html.main([str(md_file)])
+    html_content = md_file.with_suffix(".md.AS.html").read_text()
+    assert '<link rel="stylesheet" type="text/css" href="style.css">' in html_content
+
+
+def test_stylesheet_argument(tmp_path):
+    md_file = tmp_path / "test.md"
+    md_file.write_text("# Heading\n")
+    md_to_html.main(["--stylesheet", "custom.css", str(md_file)])
+    html_content = md_file.with_suffix(".md.AS.html").read_text()
+    assert '<link rel="stylesheet" type="text/css" href="custom.css">' in html_content
+    assert 'href="style.css"' not in html_content
+
+
+def test_stylesheet_argument_after_filenames(tmp_path):
+    md_file1 = tmp_path / "test1.md"
+    md_file1.write_text("# One\n")
+    md_file2 = tmp_path / "test2.md"
+    md_file2.write_text("# Two\n")
+    md_to_html.main([str(md_file1), str(md_file2), "--stylesheet=other.css"])
+    for md_file in (md_file1, md_file2):
+        html_content = md_file.with_suffix(".md.AS.html").read_text()
+        assert 'href="other.css"' in html_content
