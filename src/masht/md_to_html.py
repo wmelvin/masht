@@ -50,6 +50,7 @@ def html_style() -> str:
             margin: 1rem;
             max-width: 96%;
         }
+        pre { margin-left: 2rem; }
         a:link, a:visited {
             color: #00248F;
             text-decoration: none;
@@ -86,6 +87,7 @@ def html_head(source_md: Path) -> str:
         <style>
         {html_style()}
         </style>
+        <link rel="stylesheet" type="text/css" href="style.css">
         <base target="_blank">
         </head>
         <body>

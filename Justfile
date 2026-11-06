@@ -1,7 +1,7 @@
 @default:
   @just --list
 
-@build: 
+@build: lint check test
   uv build
 
 @check:
