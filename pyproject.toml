@@ -11,7 +11,10 @@ requires-python = ">=3.11"
 license = "MIT"
 keywords = [ "markdown", "html", "converter"]
 authors = [ { name = "Bill Melvin", email = "bill@sbillmelvin.com" } ]
-dependencies = [ "chardet", "mistune" ]
+dependencies = [
+    "chardet>=7.7.0",
+    "mistune>=3.4.0",
+]
 
 [project.urls]
 Documentation = "https://github.com/wmelvin/masht#readme"
@@ -26,10 +29,10 @@ version = {attr = "masht.__about__.__version__"}
 
 [dependency-groups]
 dev = [
-    "pytest>=9.0.1",
-    "ruff>=0.14.8",
-    "tox>=4.32.0",
-    "tox-uv>=1.29.0",
+    "pytest>=9.2.0",
+    "ruff>=0.17.4",
+    "tox>=4.67.13",
+    "tox-uv>=1.37.7",
 ]
 
 [tool.tox]
