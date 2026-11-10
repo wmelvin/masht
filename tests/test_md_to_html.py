@@ -199,3 +199,14 @@ def test_stylesheet_argument_after_filenames(tmp_path):
     for md_file in (md_file1, md_file2):
         html_content = md_file.with_suffix(".md.AS.html").read_text()
         assert 'href="other.css"' in html_content
+
+
+def test_directory_named_like_markdown_file(tmp_path, capsys):
+    d = tmp_path / 'sub.md'
+    d.mkdir()
+    md_to_html.main([str(d)])
+    out = capsys.readouterr().out
+    assert 'is not a file' in out
+    assert 'Traceback' not in out
+    assert not (tmp_path / 'sub.md.AS.html').exists()
+
