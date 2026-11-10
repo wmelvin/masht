@@ -132,6 +132,10 @@ def write_md_as_html(filename: str, stylesheet: str = default_stylesheet) -> Non
         print(f"ERROR: '{md_path}' does not exist.")
         return
 
+    if not md_path.is_file():
+        print(f"ERROR: '{md_path}' is not a file.")
+        return
+
     if md_path.suffix.lower() != ".md":
         print(f"ERROR: '{md_path}' is not a Markdown file.")
         return
